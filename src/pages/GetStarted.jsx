@@ -22,7 +22,7 @@ export default function GetStarted() {
       setFile(uploadedFile);
       setResults(null); // reset results if new file uploaded
       toast.success(`File uploaded: ${uploadedFile.name}`, {
-        position: "top-right",
+        position: "bottom-right",
       });
     }
   };
@@ -30,7 +30,7 @@ export default function GetStarted() {
   const handleCompress = () => {
     if (!file) {
       return toast.error("Please upload a file first!", {
-        position: "top-right",
+        position: "bottom-right",
       });
     }
 
@@ -46,18 +46,18 @@ export default function GetStarted() {
       ratio,
     });
 
-    toast.success("File compressed successfully!", { position: "top-right" });
+    toast.success("File compressed successfully!", { position: "bottom-right" });
   };
 
   const handleDecompress = () => {
     if (!file) {
       return toast.error("Please upload a .huff file first!", {
-        position: "top-right",
+        position: "bottom-right",
       });
     }
     if (!file.name.endsWith(".huff")) {
       return toast.error("Only .huff files can be decompressed!", {
-        position: "top-right",
+        position: "bottom-right",
       });
     }
 
@@ -73,7 +73,7 @@ export default function GetStarted() {
       ratio,
     });
 
-    toast.success("File decompressed successfully!", { position: "top-right" });
+    toast.success("File decompressed successfully!", { position: "bottom-right" });
   };
 
   // Helper to format sizes
