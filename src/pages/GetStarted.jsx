@@ -48,10 +48,6 @@ export default function GetStarted() {
     const timeTaken = (endTime - startTime).toFixed(2);
     //time taken for compression
 
-    if(!result){
-      return toast.error("Compression was not effective. Compressed file is larger than original file.", { position: "bottom-right" });
-    }
-
     setResults({
       action: "Compression",
       originalSize: result.originalSize,
@@ -62,6 +58,9 @@ export default function GetStarted() {
     });
 
     toast.success("File compressed successfully!", { position: "bottom-right" });
+    if(results.originalSize < results.compressedSize){
+        toast.info("Note: Compression was not effective. Compressed file is larger than original file.", { position: "bottom-right" });
+    }
   };
 
   const handleDecompress = async () => {
@@ -228,11 +227,39 @@ export default function GetStarted() {
               // Show different details based on action
               results.action === "Compression" ? (
                 <>
-                
+                  <Typography variant="body1">
+                    <strong>Original Size:</strong> {formatSize(results.originalSize)}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Compressed Size:</strong> {formatSize(results.compressedSize)}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Compression Ratio:</strong> {results.ratio}%
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Space Saved:</strong> {results.savedSpace}%
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Time Taken:</strong> {results.timeTaken} ms
+                  </Typography>
                 </>
               ) : (
                 <>
-                
+                  <Typography variant="body1">
+                    <strong>Original Size:</strong> {formatSize(results.originalSize)}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Decompressed Size:</strong> {formatSize(results.decompressedSize)}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Decompression Ratio:</strong> {results.ratio}%
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Space Saved:</strong> {results.savedSpace}%
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Time Taken:</strong> {results.timeTaken} ms
+                  </Typography>
                 </>
               )
             }

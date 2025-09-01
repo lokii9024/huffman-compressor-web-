@@ -215,9 +215,6 @@ export async function compressFile(file){
     const ratio = ((originalSize/compressedSize)*100).toFixed(2)
     const saved = ((1 - compressedSize/originalSize)*100).toFixed(2);
     console.log("originalSize:",originalSize,"compressedSize:",compressedSize,"ratio:",ratio,"saved:",saved);
-    if(compressedSize >= originalSize){
-        return null;
-    }
 
     //save the file
     const blob = new Blob([finalData],{
