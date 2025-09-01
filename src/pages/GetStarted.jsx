@@ -11,6 +11,7 @@ import CompressIcon from "@mui/icons-material/Compress";
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { compressFile,decompressFile } from "../utils/huffman";
 
 export default function GetStarted() {
   const [file, setFile] = useState(null);
@@ -27,29 +28,43 @@ export default function GetStarted() {
     }
   };
 
-  const handleCompress = () => {
+  const handleCompress = async () => {
     if (!file) {
       return toast.error("Please upload a file first!", {
         position: "bottom-right",
       });
     }
 
-    // Simulating compression (in real case: call Huffman compression function)
-    const originalSize = file.size;
-    const compressedSize = Math.floor(originalSize * 0.6); // assume 40% compression
-    const ratio = ((1 - compressedSize / originalSize) * 100).toFixed(2);
+    //if file if not text file
+    if (!file.name.endsWith(".txt") && !file.name.endsWith(".csv") && !file.name.endsWith(".json") && !file.name.endsWith(".xml")) {
+      return toast.error("Only .txt, .csv, .json, .xml files can be compressed!", {
+        position: "bottom-right",
+      });
+    }
+
+    const startTime = performance.now();
+    const result = await compressFile(file)
+    const endTime = performance.now();
+    const timeTaken = (endTime - startTime).toFixed(2);
+    //time taken for compression
+
+    if(!result){
+      return toast.error("Compression was not effective. Compressed file is larger than original file.", { position: "bottom-right" });
+    }
 
     setResults({
       action: "Compression",
-      originalSize,
-      compressedSize,
-      ratio,
+      originalSize: result.originalSize,
+      compressedSize: result.compressedSize,
+      ratio: result.ratio,
+      savedSpace: result.saved,
+      timeTaken
     });
 
     toast.success("File compressed successfully!", { position: "bottom-right" });
   };
 
-  const handleDecompress = () => {
+  const handleDecompress = async () => {
     if (!file) {
       return toast.error("Please upload a .huff file first!", {
         position: "bottom-right",
@@ -61,16 +76,19 @@ export default function GetStarted() {
       });
     }
 
-    // Simulating decompression (in real case: call Huffman decompression function)
-    const compressedSize = file.size;
-    const originalSize = Math.floor(compressedSize * 1.7); // assume decompression
-    const ratio = ((1 - compressedSize / originalSize) * 100).toFixed(2);
+    const startTime = performance.now();
+    const result = await decompressFile(file);
+    const endTime = performance.now();
+    const timeTaken = (endTime - startTime).toFixed(2);
+    //time taken for decompression
 
     setResults({
       action: "Decompression",
-      originalSize,
-      compressedSize,
-      ratio,
+      originalSize: result.originalSize,
+      decompressedSize: result.decompressedSize,
+      ratio: result.ratio,
+      savedSpace: result.saved,
+      timeTaken
     });
 
     toast.success("File decompressed successfully!", { position: "bottom-right" });
@@ -206,15 +224,18 @@ export default function GetStarted() {
               {results.action} Results
             </Typography>
             <Divider sx={{ borderColor: "rgba(255,255,255,0.2)", mb: 2 }} />
-            <Typography>
-              <strong>Original Size:</strong> {formatSize(results.originalSize)}
-            </Typography>
-            <Typography>
-              <strong>Compressed Size:</strong> {formatSize(results.compressedSize)}
-            </Typography>
-            <Typography>
-              <strong>Compression Ratio:</strong> {results.ratio}%
-            </Typography>
+            {
+              // Show different details based on action
+              results.action === "Compression" ? (
+                <>
+                
+                </>
+              ) : (
+                <>
+                
+                </>
+              )
+            }
           </Paper>
         )}
       </Paper>
