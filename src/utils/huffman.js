@@ -86,7 +86,7 @@ class MinHeap {
 }
 
 // function to build the huffman tree
-function buildHuffmanTree(freqMap) {
+export function buildHuffmanTree(freqMap) {
     const minHeap = new MinHeap();
 
     for (const [char, freq] of freqMap.entries()) {
@@ -117,7 +117,7 @@ function generateCodes(node,prefix = "",codeMap = new Map()){
 }
 
 // function to read file
-async function readFile(file){
+export async function readFile(file){
     return new Promise((resolve,reject) => {
         const reader = new FileReader();
         reader.onload = () => resolve(reader.result)
@@ -127,7 +127,7 @@ async function readFile(file){
 }
 
 //build the frequency map
-function buildFrequencyMap(text){
+export function buildFrequencyMap(text){
     const freqMap = new Map();
     for(const char of text){
         freqMap.set(char,(freqMap.get(char) || 0) + 1);

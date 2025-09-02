@@ -5,6 +5,9 @@ import {
   Button,
   Paper,
   Divider,
+  Dialog,
+  DialogTitle,
+  DialogContent,
 } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import CompressIcon from "@mui/icons-material/Compress";
@@ -12,10 +15,12 @@ import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { compressFile,decompressFile } from "../utils/huffman";
+import HuffmanTree from "../components/HuffmanTree";
 
 export default function GetStarted() {
   const [file, setFile] = useState(null);
   const [results, setResults] = useState(null);
+  const [open, setOpen] = useState(false);
 
   const handleFileUpload = (e) => {
     const uploadedFile = e.target.files[0];
@@ -263,6 +268,28 @@ export default function GetStarted() {
                 </>
               )
             }
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setOpen(true)}
+              sx={{ mt: 2 }}
+            >
+              Show Huffman Tree
+            </Button>
+            {/* Modal Dialog */}
+            <Dialog
+              open={open}
+              onClose={() => setOpen(false)}
+              fullWidth
+              maxWidth="lg"
+            >
+              <DialogTitle>Huffman Tree</DialogTitle>
+              <DialogContent>
+                <div style={{ width: "100%", height: "500px" }}>
+                  <HuffmanTree file={file} action={results.action} />
+                </div>
+              </DialogContent>
+            </Dialog>
           </Paper>
         )}
       </Paper>
